@@ -12,7 +12,7 @@ const instagramWidth = 1080;
 const instagramHeight = 1350;
 
 fs.readdirSync(inputFolder).forEach(file => {
-    console.log(file);
+    console.log("Processing: " + file);
 
     var blur = Jimp.read(inputFolder + file)
     .then(lenna => {
@@ -28,7 +28,6 @@ fs.readdirSync(inputFolder).forEach(file => {
     .then(lenna => {
         return lenna
         .scaleToFit(instagramWidth, instagramHeight) // resize
-
     })
     .catch(err => {
         console.error(err);
@@ -39,10 +38,11 @@ fs.readdirSync(inputFolder).forEach(file => {
     Promise.all(jimps).then(function(data) {
         return Promise.all(jimps);
     }).then(function(data){
-        console.log("Image 1:" + data[1].bitmap.width);
-        console.log("Image 0:" + data[0].bitmap.width);
-        var offset = Math.round((data[0].bitmap.width - data[1].bitmap.width)/2);
-        data[0].composite(data[1],offset,0)
+        // console.log("Image 1:" + data[1].bitmap.width);
+        // console.log("Image 0:" + data[0].bitmap.width);
+        var offsetWidth = Math.round((data[0].bitmap.width - data[1].bitmap.width)/2);
+        var offsetHeight = Math.round((data[0].bitmap.height - data[1].bitmap.height)/2);
+        data[0].composite(data[1],offsetWidth,offsetHeight)
         .quality(100) // set JPEG quality
         .write(outputFolder + 'Instagram_' + file); // save
     }).catch(err => {
